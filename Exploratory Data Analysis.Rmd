@@ -1,6 +1,6 @@
 ---
 title: "Exploratory Data Analysis"
-author: "Sana Rasheed"
+author: "Uzair Shafique"
 date: "October 20, 2020"
 output: html_document
 ---
@@ -28,10 +28,13 @@ head(airquality)
 
 ```{r }
 # START YOUR CODE FROM HERE
+hist(airquality$Temp, main = 'temperature in airport', col = 'green')
+hist(airquality$Wind, main = 'Data Distribution Wind',col='Blue')
 ```
 
 
 ```{r }
+with(airquality, plot(Solar.R, Ozone, col = 'red'))
 
 ```
 
@@ -61,10 +64,28 @@ head(state.x77)
 
 ```{r }
 # START YOUR CODE FROM HERE
+data(state)
+df <- data.frame(state.x77)
+df$region <- state.region
+plot(df$Income ~ df$Illiteracy, data = df, col = df$region, pch = 19,
+     xlab = "Illiteracy", ylab = "Income", main = "Income vs Illiteracy")
+
+
 ```
 
 
 ```{r }
+library(ggplot2)
+data(state.x77)
+data(state)
+state$region <- state.region
+state$region <- as.factor(state$region)
+ggplot(state, aes(x=Population, y=Life.Exp)) + geom_point(aes(color=region))+labs(title="Relationship between Population,Region and Life Expectancy", x="Population", y="Life Expectancy")
+##Export chart to pdf
+pdf("charts.pdf")
+ggplot(state, aes(x=Income, y=Illiteracy)) + geom_point(aes(color=region)) + labs(title="Relationship between Income and Illiteracy", x="Income", y="Illiteracy")
+ggplot(state, aes(x=Population, y=Life.Exp)) + geom_point(aes(color=region)) + labs(title="Relationship between Population, Region and Life Expectancy", x="Population", y="Life Expectancy")
+dev.off()
 
 ```
 
@@ -83,9 +104,17 @@ head(women)
 
 ```{r }
 # START YOUR CODE FROM HERE
+library(lattice)
+xyplot(height ~ weight, data = women)
+
+
 ```
 
 ```{r }
+with(women, plot(height, weight, main = "height and weight"))
+model <- lm(height ~ weight, women)
+abline(model, lwd = 2, col = "red", lty = 5)
+pdf("charts.pdf")
 
 ```
 
@@ -101,8 +130,7 @@ head(women)
 1. Using the longley dataset, plot the relationship between Umployed and GNP.
 
 2. As a scatter plot, plot out Unemployed values as blue dots and Employed values as green dots. 
-
-3. Create a new variable as a column known as Armed.Forces.Unemployed.Rel. In it, place a Y for when the number of armed forces are greater than unemployed and N otherwise. Plot a graph to show the relationship between unemployed and armed forces and use the Armed.Forces.Unemployed.Rel for aesthetics and color.
+3.  Create a new variable as a column known as Armed.Forces.Unemployed.Rel. In it, place a Y for when the number of armed forces are greater than unemployed and N otherwise. Plot a graph to show the relationship between unemployed and armed forces and use the Armed.Forces.Unemployed.Rel for aesthetics and color.
 
 Add appropriate title, axis labels and charts for EACH of the above charts. 
 You need to use ggplot2 to accomplish this task.
@@ -115,11 +143,14 @@ head(longley)
 
 ```{r }
 # START YOUR CODE FOR GRAPH-1
-
+library(ggplot2)
+qplot(Unemployed, GNP, data = longley)
 ```
 
 ```{r }
-# START YOUR CODE fFOR GRAPH-2
+# START YOUR CODE FOR GRAPH-2
+qplot(Unemployed, GNP, data = longley, Unemployed = "blue", Employed = "Green") 
+
 
 ```
 
